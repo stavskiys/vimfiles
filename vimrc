@@ -10,7 +10,7 @@ silent! runtime bundles.vim
 "  General
 "  ---------------------------------------------------------------------------
 
-filetype plugin indent on     
+filetype plugin indent on
 let mapleader = ","
 let g:mapleader = ","
 set modelines=0
@@ -76,7 +76,7 @@ set colorcolumn=80
 set statusline=%F%m%r%h%w[%L]%y[%p%%][%04v][%{fugitive#statusline()}]
 
 " RVM status line
-set statusline+=%{rvm#statusline()} 
+set statusline+=%{rvm#statusline()}
 
 "  ---------------------------------------------------------------------------
 "  Mappings
@@ -127,7 +127,7 @@ imap jj <ESC>
 set grepprg=ack
 
 " ,a to Ack (search in files)
-nnoremap <leader>a :Ack 
+nnoremap <leader>a :Ack
 
 " Auto format
 map === mmgg=G`m^zz
@@ -279,8 +279,8 @@ map <leader>gr :topleft :split config/routes.rb<cr>
 map <leader>gg :topleft 100 :split Gemfile<cr>
 
 " Skip to Models and Views
-map <Leader>m :Rmodel 
-map <Leader>v :Rview 
+map <Leader>m :Rmodel
+map <Leader>v :Rview
 
 "  ---------------------------------------------------------------------------
 "  GUI
@@ -292,7 +292,7 @@ if has("gui_running")
   set guioptions-=R " no scrollbar on the right
   set guioptions-=l " no scrollbar on the left
   set guioptions-=b " no scrollbar on the bottom
-  set guioptions=aiA 
+  set guioptions=aiA
   set mouse=v
   set guifont=Monaco:h12 "<- Maybe a good idea when using mac
 endif
