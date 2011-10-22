@@ -19,7 +19,11 @@ set nobackup
 set nowritebackup
 set noswapfile
 syntax enable
-set autoread
+
+" remember folding
+au BufWinLeave ?* mkview
+au BufWinEnter ?* silent loadview
+
 
 "  ---------------------------------------------------------------------------
 "  UI
@@ -35,25 +39,26 @@ set showcmd
 set hidden
 set wildmenu
 set wildmode=list:longest
-set visualbell
+
+" Show $ at end of line and trailing space as ~
+set lcs=tab:▸\ ,eol:¬,trail:.,extends:>,precedes:<
+
+set novisualbell  " No blinking .
+set noerrorbells  " No noise.
+set laststatus=2  " Always show status line.
+
 set cursorline
 set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
 set number
-set relativenumber
 set undofile
+set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
 
-" Auto adjust window sizes when they become current
-set winwidth=84
-set winheight=5
-set winminheight=5
-set winheight=999
-
-colorscheme solarized
-set background=light " or dark
-set t_Co=256
+" gvim specific
+set mousehide  " Hide mouse after chars typed
+set mouse=a  " Mouse in all modes
 
 "  ---------------------------------------------------------------------------
 "  Text Formatting
@@ -67,7 +72,42 @@ set expandtab
 set nowrap
 set textwidth=79
 set formatoptions=n
-set colorcolumn=80
+set colorcolumn=100
+
+
+" Only do this part when compiled with support for autocommands
+if has("autocmd")
+  " Enable file type detection
+  filetype on
+
+  " Syntax of these languages is fussy over tabs Vs spaces
+  autocmd FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
+  autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+  " Customisations based on house-style (arbitrary)
+  autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType css setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
+
+  " Treat .thor files as Ruby
+  autocmd BufNewFile,BufRead *.thor setfiletype ruby
+
+  " Thorfile, Rakefile and Gemfile are Ruby
+  au BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru} set ft=ruby
+
+
+  autocmd BufNewFile,BufRead *.scss setfiletype css
+
+  " Treat .rss files as XML
+  autocmd BufNewFile,BufRead *.rss setfiletype xml
+
+  autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+
+  " set filetype for json file to javascript
+  autocmd BufNewFile,BufRead *.json setfiletype javascript
+  autocmd BufNewFile,BufRead *_spec.rb setfiletype ruby
+endif
 
 "  ---------------------------------------------------------------------------
 "  Status Line
@@ -81,22 +121,71 @@ set statusline+=%{rvm#statusline()}
 "  ---------------------------------------------------------------------------
 "  Mappings
 "  ---------------------------------------------------------------------------
+"
+
+" saksmlz specific:
+
+" CTRL+S saves the buffer
+nmap <C-s> :w<CR>
+
+
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+
+
+" Shift+Insert will paste from system buffer (Control+C)
+cmap <S-Insert>		<C-R>+
+exe 'inoremap <script> <S-Insert>' paste#paste_cmd['i']
+
+
+" Text indentation with Alt+[ and so on
+nmap <M-h> <<
+nmap <M-l> >>
+vmap <M-h> <gv
+vmap <M-l> >gv
+
+
+" Switch between buffers
+map <M-1> :b1<CR>
+map <M-2> :b2<CR>
+map <M-3> :b3<CR>
+map <M-4> :b4<CR>
+map <M-5> :b5<CR>
+map <M-6> :b6<CR>
+map <M-7> :b7<CR>
+map <M-8> :b8<CR>
+map <M-9> :b9<CR>
+
+" Next/Previous tab
+map <M-.> :bn<CR>
+map <M-,> :bp<CR>
+
+
+" Text movimg with plugin unimpaired.vim
+" Bubble single lines
+nmap <M-k> [e
+nmap <M-j> ]e
+
+" Bubble multiple lines
+vmap <M-k> [egv
+vmap <M-j> ]egv
+
+
+" Clear highlighting
+map <C-space> :nohl <cr>
 
 " Searching / moving
-nnoremap / /\v
-vnoremap / /\v
+" nnoremap / /\\v
+" vnoremap / /\\v
 set ignorecase
+" ignore folllowing files
+set wildignore+=*.bak,*~,*.tmp,*.backup,*swp,*.o,*.obj,.git,*.rbc,*.png,*.xpi
 set smartcase
 set gdefault
 set incsearch
 set showmatch
 set hlsearch
-" turn search highlight off
-nnoremap <leader><space> :noh<cr> 
-" search (forwards)
-nmap <space> /
-" search (backwards)
-map <c-space> ?
+set mat=5  " Bracket blinking.
 
 " Center screen when scrolling search results
 nmap n nzz
@@ -129,8 +218,6 @@ set grepprg=ack
 " ,a to Ack (search in files)
 nnoremap <leader>a :Ack
 
-" Auto format
-map === mmgg=G`m^zz
 
 " Move between splits
 nnoremap <C-h> <C-w>h
@@ -142,9 +229,6 @@ nnoremap <C-l> <C-w>l
 " map <C-J> :m +1 <CR>
 " map <C-K> :m -2 <CR>
 
-" Switch between buffers
-noremap <tab> :bn<CR>
-noremap <S-tab> :bp<CR>
 " close buffer
 nmap <leader>d :bd<CR>
 " close all buffers
@@ -182,16 +266,16 @@ map <F2> :ConqueTerm zsh<CR>
 nnoremap <silent> <F3> :YRShow<cr>
 inoremap <silent> <F3> <ESC>:YRShow<cr>
 
-" Press F5 to toggle GUndo tree
-nnoremap <F5> :GundoToggle<CR>
-
-" indent file and return cursor and center cursor
-map   <silent> <F6> mmgg=G`m^zz
-imap  <silent> <F6> <Esc> mmgg=G`m^zz
-
 "  ---------------------------------------------------------------------------
 "  Plugins
 "  ---------------------------------------------------------------------------
+
+
+" Minibuffer Explorer Settings
+let g:miniBufExplMapWindowNavVim = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplModSelTarget = 1
 
 " Command-T
 " find file
@@ -202,32 +286,12 @@ map <leader>gf :CommandTFlush<cr>\|:CommandT %%<cr>
 
 let g:CommandTMaxHeight = 20
 
-" NERDTree
-let NERDTreeShowBookmarks = 0
-let NERDChristmasTree = 1
-let NERDTreeWinPos = "left"
-let NERDTreeHijackNetrw = 1
-let NERDTreeQuitOnOpen = 1
-let NERDTreeWinSize = 50 
-" open file browser
-map <leader>p :NERDTreeToggle<cr>
-
-" TagList
-set tags=./tags;
-map <leader>l :TlistToggle <cr>
-let Tlist_Use_Right_Window = 1
-let Tlist_WinWidth = 60
-
 " Use only current file to autocomplete from tags
 " set complete=.,t
 set complete=.,w,b,u,t,i
 
 " Buffer window (find file in open buffers)
 nmap <silent> <leader>b :FufBuffer<CR>
-
-" AutoClose
-let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'", '#{': '}'} 
-let g:AutoCloseProtectedRegions = ["Character"] 
 
 let my_home = expand("$HOME/")
 
@@ -251,8 +315,8 @@ endif
 let g:cssColorVimDoNotMessMyUpdatetime = 1
 
 " Easy commenting
-nnoremap // :TComment<CR>
-vnoremap // :TComment<CR>
+nnoremap <M-/> :TComment<CR>
+vnoremap <M-/> :TComment<CR>
 
 " Supertab
 " let g:SuperTabDefaultCompletionType = "context"
@@ -294,9 +358,9 @@ if has("gui_running")
   set guioptions-=b " no scrollbar on the bottom
   set guioptions=aiA
   set mouse=v
-  set guifont=Monaco:h12 "<- Maybe a good idea when using mac
+  set guifont=Monaco\ 10
 endif
-set guifont=Monaco:h12
+set guifont=Monaco\ 10
 
 "  ---------------------------------------------------------------------------
 "  Directories
@@ -323,3 +387,25 @@ endif
 
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source ~/.vimrc
+
+
+colorscheme railscasts
+
+"Invisible character colors
+highlight NonText guifg=#4a4a59
+highlight SpecialKey guifg=#4a4a59
+
+
+" Strip trailing whitespace
+function! <SID>StripTrailingWhitespaces()
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  %s/\s\+$//e
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
