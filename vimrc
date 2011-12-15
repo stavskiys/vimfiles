@@ -113,10 +113,10 @@ endif
 "  Status Line
 "  ---------------------------------------------------------------------------
 
-set statusline=%F%m%r%h%w[%L]%y[%p%%][%04v][%{fugitive#statusline()}]
+" set statusline=%F%m%r%h%w[%L]%y[%p%%][%04v][%{fugitive#statusline()}]
 
 " RVM status line
-set statusline+=%{rvm#statusline()}
+" set statusline+=%{rvm#statusline()}
 
 "  ---------------------------------------------------------------------------
 "  Mappings
