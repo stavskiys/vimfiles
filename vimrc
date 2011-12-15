@@ -346,7 +346,7 @@ set guifont=Monaco\ 10
 "  Directories
 "  ---------------------------------------------------------------------------
 
-set backupdir=~/tmp,/tmp
+set backupdir=~/.vim/tmp,~/tmp,/tmp
 set undodir=~/.vim/.tmp,~/tmp,~/.tmp,/tmp
 
 " Ctags path (brew install ctags)
