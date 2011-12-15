@@ -196,8 +196,8 @@ set hlsearch
 set mat=5  " Bracket blinking.
 
 " Center screen when scrolling search results
-nmap n nzz
-nmap N Nzz
+" nmap n nzz
+" nmap N Nzz
 
 imap <C-h> <ESC>^
 imap <C-l> <ESC>$
