@@ -352,6 +352,9 @@ set undodir=~/.vim/.tmp,~/tmp,~/.tmp,/tmp
 " Ctags path (brew install ctags)
 let Tlist_Ctags_Cmd = '/usr/bin/ctags'
 
+map <Leader>rt :!ctags --extra=+f --exclude=.git --exclude=.hg --exclude=tmp --exclude=vendor/assets --exclude=public --exclude=app/assets --exclude=log -R *<CR><CR>
+
+
 " Make Vim use RVM correctly when using Zsh
 " https://rvm.beginrescueend.com/integration/vim/
 set shell=/bin/sh
