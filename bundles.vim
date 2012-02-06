@@ -18,6 +18,9 @@ call vundle#rc()
 " Bundle "git://github.com/clones/vim-fuzzyfinder.git"
 " Bundle "https://github.com/ervandew/supertab"
 " Bundle "git://github.com/scrooloose/syntastic.git"
+" Bundle "git://github.com/Bogdanp/rbrepl.vim.git"
+" Bundle "git://github.com/skammer/vim-css-color.git"
+" Bundle "jQuery"
 Bundle 'gmarik/vundle'
 Bundle "git://github.com/mileszs/ack.vim.git"
 Bundle "git://github.com/tpope/vim-rails.git"
@@ -29,7 +32,6 @@ Bundle "git://github.com/panozzaj/vim-autocorrect.git"
 Bundle "git://github.com/tsaleh/vim-tcomment.git"
 Bundle "git://github.com/godlygeek/tabular.git"
 Bundle "git://github.com/vim-scripts/L9.git"
-Bundle "git://github.com/Bogdanp/rbrepl.vim.git"
 Bundle "git://github.com/rson/vim-conque.git"
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle "git://github.com/gmarik/snipmate.vim.git"
@@ -39,9 +41,7 @@ Bundle "git://github.com/nelstrom/vim-textobj-rubyblock.git"
 Bundle "git://github.com/fholgado/minibufexpl.vim.git"
 Bundle "git://github.com/vim-scripts/Specky.git"
 Bundle "git://repo.or.cz/vcscommand"
-Bundle "git://github.com/skammer/vim-css-color.git"
 Bundle "git://github.com/tpope/vim-unimpaired.git"
-Bundle "jQuery"
 
 filetype plugin indent on     " and turn it back on!
 
